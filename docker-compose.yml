@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: marigold-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-marigold}
+      POSTGRES_USER: ${POSTGRES_USER:-marigold}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-marigold_dev}
+    ports:
+      - "5433:5432"
+    volumes:
+      - marigold-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-marigold} -d ${POSTGRES_DB:-marigold}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  marigold-postgres-data:

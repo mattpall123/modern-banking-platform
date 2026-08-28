@@ -1,7 +1,12 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from './auth/useAuth'
+import { Routes, Route } from 'react-router-dom'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { AppLayout } from './components/layout/AppLayout'
+import { LandingPage } from './pages/LandingPage'
+import { AccountsPage } from './pages/marketing/AccountsPage'
+import { AiAssistantPage } from './pages/marketing/AiAssistantPage'
+import { InsightsInfoPage } from './pages/marketing/InsightsInfoPage'
+import { SecurityPage } from './pages/marketing/SecurityPage'
+import { FaqPage } from './pages/marketing/FaqPage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { DashboardPage } from './pages/DashboardPage'
@@ -14,18 +19,15 @@ import { AuditLogPage } from './pages/AuditLogPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ForbiddenPage } from './pages/ForbiddenPage'
 
-function RootRedirect() {
-  const { auth } = useAuth()
-  if (!auth) {
-    return <Navigate to="/login" replace />
-  }
-  return <Navigate to={auth.role === 'ANALYST' ? '/fraud' : '/dashboard'} replace />
-}
-
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<RootRedirect />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/learn/accounts" element={<AccountsPage />} />
+      <Route path="/learn/ai-assistant" element={<AiAssistantPage />} />
+      <Route path="/learn/insights" element={<InsightsInfoPage />} />
+      <Route path="/learn/security" element={<SecurityPage />} />
+      <Route path="/learn/faq" element={<FaqPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/403" element={<ForbiddenPage />} />

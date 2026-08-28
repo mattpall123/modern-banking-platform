@@ -2,6 +2,9 @@ package com.marigold.marigoldapi.ai.chat;
 
 import com.marigold.marigoldapi.ai.chat.tools.AccountTools;
 import com.marigold.marigoldapi.ai.chat.tools.TransactionTools;
+import com.marigold.marigoldapi.ai.guardrails.AuditLoggingAdvisor;
+import com.marigold.marigoldapi.ai.guardrails.InputPolicyAdvisor;
+import com.marigold.marigoldapi.ai.guardrails.OutputPolicyAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -25,14 +28,17 @@ public class ChatService {
     public ChatService(ChatClient.Builder chatClientBuilder,
                         VectorStore vectorStore,
                         AccountTools accountTools,
-                        TransactionTools transactionTools) {
+                        TransactionTools transactionTools,
+                        InputPolicyAdvisor inputPolicyAdvisor,
+                        OutputPolicyAdvisor outputPolicyAdvisor,
+                        AuditLoggingAdvisor auditLoggingAdvisor) {
         QuestionAnswerAdvisor questionAnswerAdvisor = QuestionAnswerAdvisor.builder(vectorStore)
                 .searchRequest(SearchRequest.builder().topK(4).build())
                 .build();
 
         this.chatClient = chatClientBuilder
                 .defaultSystem(SYSTEM_PROMPT)
-                .defaultAdvisors(questionAnswerAdvisor)
+                .defaultAdvisors(auditLoggingAdvisor, inputPolicyAdvisor, questionAnswerAdvisor, outputPolicyAdvisor)
                 .defaultTools(accountTools, transactionTools)
                 .build();
     }

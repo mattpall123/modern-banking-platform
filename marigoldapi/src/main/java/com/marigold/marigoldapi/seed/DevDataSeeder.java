@@ -133,11 +133,11 @@ public class DevDataSeeder implements CommandLineRunner {
                     "Payroll Deposit", "INCOME", atDay(current, 2));
 
             transferService.transfer(checking.getId(), externalClearing.getId(), monthlyRent,
-                    "Monthly Rent", "RENT", atDay(current, 3));
+                    "Monthly Rent", "RENT", atDay(current, 3), false);
 
             transferService.transfer(checking.getId(), externalClearing.getId(),
                     BigDecimal.valueOf(80 + faker.number().numberBetween(0, 150)),
-                    "Utility Bill - " + faker.company().name(), "UTILITIES", atDay(current, 5));
+                    "Utility Bill - " + faker.company().name(), "UTILITIES", atDay(current, 5), false);
 
             int discretionaryCount = 8 + faker.number().numberBetween(0, 6);
             for (int j = 0; j < discretionaryCount; j++) {
@@ -166,7 +166,7 @@ public class DevDataSeeder implements CommandLineRunner {
         int day = 1 + faker.number().numberBetween(0, month.lengthOfMonth() - 1);
 
         transferService.transfer(checking.getId(), externalClearing.getId(), amount,
-                description, category, atDay(month, day));
+                description, category, atDay(month, day), false);
     }
 
     private Instant atDay(LocalDate month, int day) {

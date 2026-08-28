@@ -7,6 +7,7 @@ import com.marigold.marigoldapi.domain.repository.AccountRepository;
 import com.marigold.marigoldapi.domain.repository.CategoryRepository;
 import com.marigold.marigoldapi.domain.repository.LedgerEntryRepository;
 import com.marigold.marigoldapi.domain.repository.TransactionRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,22 +22,32 @@ public class TransferService {
     private final LedgerEntryRepository ledgerEntryRepository;
     private final CategoryRepository categoryRepository;
     private final AccountService accountService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public TransferService(AccountRepository accountRepository,
                             TransactionRepository transactionRepository,
                             LedgerEntryRepository ledgerEntryRepository,
                             CategoryRepository categoryRepository,
-                            AccountService accountService) {
+                            AccountService accountService,
+                            ApplicationEventPublisher eventPublisher) {
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
         this.ledgerEntryRepository = ledgerEntryRepository;
         this.categoryRepository = categoryRepository;
         this.accountService = accountService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
     public Transaction transfer(Long fromAccountId, Long toAccountId, BigDecimal amount,
                                  String description, String categoryName, Instant occurredAt) {
+        return transfer(fromAccountId, toAccountId, amount, description, categoryName, occurredAt, true);
+    }
+
+    @Transactional
+    public Transaction transfer(Long fromAccountId, Long toAccountId, BigDecimal amount,
+                                 String description, String categoryName, Instant occurredAt,
+                                 boolean triggerFraudScoring) {
         if (fromAccountId.equals(toAccountId)) {
             throw new InvalidTransferException("Cannot transfer to the same account");
         }
@@ -75,6 +86,11 @@ public class TransferService {
         to.setBalanceCache(to.getBalanceCache().add(amount));
         accountRepository.save(from);
         accountRepository.save(to);
+
+        if (triggerFraudScoring && from.getType() != AccountType.SYSTEM && to.getType() == AccountType.SYSTEM) {
+            eventPublisher.publishEvent(new TransactionCreatedEvent(
+                    transaction.getId(), from.getId(), to.getId(), amount));
+        }
 
         return transaction;
     }

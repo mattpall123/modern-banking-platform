@@ -6,6 +6,8 @@ import com.marigold.marigoldapi.banking.exception.AccessDeniedOnAccountException
 import com.marigold.marigoldapi.banking.exception.AccountNotFoundException;
 import com.marigold.marigoldapi.banking.exception.InsufficientFundsException;
 import com.marigold.marigoldapi.banking.exception.InvalidTransferException;
+import com.marigold.marigoldapi.ai.fraud.FraudAlertNotFoundException;
+import com.marigold.marigoldapi.ai.fraud.InvalidFraudAlertTransitionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -29,6 +31,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({InsufficientFundsException.class, InvalidTransferException.class})
     public ProblemDetail handleBadTransfer(RuntimeException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(FraudAlertNotFoundException.class)
+    public ProblemDetail handleFraudAlertNotFound(FraudAlertNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFraudAlertTransitionException.class)
+    public ProblemDetail handleInvalidFraudAlertTransition(InvalidFraudAlertTransitionException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
     @ExceptionHandler(EmailAlreadyInUseException.class)

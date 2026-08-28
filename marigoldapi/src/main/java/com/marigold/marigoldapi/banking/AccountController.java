@@ -34,6 +34,9 @@ public class AccountController {
     @GetMapping
     public List<AccountResponse> listMyAccounts() {
         User user = currentUserService.getCurrentUser();
+        if (user.getCustomer() == null) {
+            return List.of();
+        }
         return accountService.getAccountsForCustomer(user.getCustomer().getId()).stream()
                 .map(AccountResponse::from)
                 .toList();

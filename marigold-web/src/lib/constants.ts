@@ -1,0 +1,12 @@
+export const CATEGORY_LIST = [
+  'GROCERIES',
+  'RENT',
+  'UTILITIES',
+  'DINING',
+  'ENTERTAINMENT',
+  'TRANSPORTATION',
+  'INCOME',
+  'SHOPPING',
+  'HEALTHCARE',
+  'TRANSFER',
+] as const

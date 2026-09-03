@@ -38,7 +38,7 @@ export function TransferPage() {
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({ resolver: zodResolver(schema) })
+  } = useForm({ resolver: zodResolver(schema) })
 
   useEffect(() => {
     const from = searchParams.get('from')

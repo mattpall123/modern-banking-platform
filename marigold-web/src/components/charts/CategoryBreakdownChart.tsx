@@ -26,7 +26,7 @@ export function CategoryBreakdownChart({ data }: { data: CategorySpend[] }) {
         <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#EFE6D8" />
         <XAxis type="number" tickFormatter={(value) => formatCurrency(value)} fontSize={12} />
         <YAxis type="category" dataKey="category" width={110} fontSize={12} />
-        <Tooltip formatter={(value: number) => formatCurrency(value)} />
+        <Tooltip formatter={(value) => formatCurrency(Number(value))} />
         <Bar dataKey="amount" radius={[0, 8, 8, 0]}>
           {chartData.map((_, index) => (
             <Cell key={index} fill={PALETTE[index % PALETTE.length]} />

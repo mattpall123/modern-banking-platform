@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { ProtectedRoute } from './auth/ProtectedRoute'
+import { BackendWakeGate } from './components/BackendWakeGate'
 import { AppLayout } from './components/layout/AppLayout'
 import { LandingPage } from './pages/LandingPage'
 import { AccountsPage } from './pages/marketing/AccountsPage'
@@ -28,15 +29,31 @@ export function AppRoutes() {
       <Route path="/learn/insights" element={<InsightsInfoPage />} />
       <Route path="/learn/security" element={<SecurityPage />} />
       <Route path="/learn/faq" element={<FaqPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/login"
+        element={
+          <BackendWakeGate>
+            <LoginPage />
+          </BackendWakeGate>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <BackendWakeGate>
+            <RegisterPage />
+          </BackendWakeGate>
+        }
+      />
       <Route path="/403" element={<ForbiddenPage />} />
 
       <Route
         element={
-          <ProtectedRoute>
-            <AppLayout />
-          </ProtectedRoute>
+          <BackendWakeGate>
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          </BackendWakeGate>
         }
       >
         <Route

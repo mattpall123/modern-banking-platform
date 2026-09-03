@@ -8,6 +8,7 @@ import com.marigold.marigoldapi.banking.exception.InsufficientFundsException;
 import com.marigold.marigoldapi.banking.exception.InvalidTransferException;
 import com.marigold.marigoldapi.ai.fraud.FraudAlertNotFoundException;
 import com.marigold.marigoldapi.ai.fraud.InvalidFraudAlertTransitionException;
+import com.marigold.marigoldapi.ai.RateLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -41,6 +42,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidFraudAlertTransitionException.class)
     public ProblemDetail handleInvalidFraudAlertTransition(InvalidFraudAlertTransitionException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ProblemDetail handleRateLimitExceeded(RateLimitExceededException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
     }
 
     @ExceptionHandler(EmailAlreadyInUseException.class)

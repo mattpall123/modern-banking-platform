@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Random;
 
 @Component
-@Profile("dev")
+@Profile("demo")
 public class DevDataSeeder implements CommandLineRunner {
 
     private static final List<String> CATEGORY_NAMES = List.of(

@@ -1,11 +1,20 @@
 import { Link, Navigate } from 'react-router-dom'
-import { MessageCircle, LineChart, ShieldCheck, Wallet, FileSearch } from 'lucide-react'
+import {
+  MessageCircle,
+  LineChart,
+  ShieldCheck,
+  Wallet,
+  FileSearch,
+  Sparkles,
+  ArrowRight,
+} from 'lucide-react'
 import { useAuth } from '../auth/useAuth'
 import { MarketingPageLayout } from '../components/marketing/MarketingPageLayout'
 import { FeatureCard } from '../components/marketing/FeatureCard'
 import { FaqAccordion } from '../components/marketing/FaqAccordion'
 import { MarigoldMark } from '../components/brand/MarigoldMark'
-import { Button } from '../components/ui/Button'
+import torontoSkyline from '../assets/toronto-skyline.jpg'
+import torontoSunset from '../assets/toronto-sunset.jpg'
 
 const FEATURES = [
   {
@@ -35,6 +44,15 @@ const FEATURES = [
   },
 ]
 
+const QUICK_LINKS = [
+  { label: 'Open an account', to: '/register' },
+  { label: 'Sign on to online banking', to: '/login' },
+  { label: 'Ask the AI Assistant', to: '/learn/ai-assistant' },
+  { label: 'See your spending insights', to: '/learn/insights' },
+  { label: 'How fraud review works', to: '/learn/security' },
+  { label: 'Read the FAQ', to: '/learn/faq' },
+]
+
 export function LandingPage() {
   const { auth } = useAuth()
 
@@ -44,43 +62,130 @@ export function LandingPage() {
 
   return (
     <MarketingPageLayout>
-      <section className="relative overflow-hidden bg-marigold-50">
-        <MarigoldMark size={220} className="absolute -left-16 -top-16 rotate-12 opacity-20" />
-        <MarigoldMark size={160} className="absolute -right-10 top-24 -rotate-12 opacity-15" />
-        <MarigoldMark size={120} className="absolute bottom-0 left-1/3 opacity-10" />
+      <section className="relative z-10 bg-marigold-50">
+        <div
+          className="absolute inset-0 bg-cover"
+          style={{ backgroundImage: `url(${torontoSunset})`, backgroundPosition: 'center 55%' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-marigold-50 via-marigold-50/85 to-marigold-500/25" />
+        <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 py-20 md:grid-cols-2 md:py-28">
+          <div className="flex flex-col items-start gap-5 text-left">
+            <h1 className="font-display text-4xl font-semibold leading-tight text-text md:text-5xl">
+              Banking that grows with you.
+            </h1>
+            <p className="max-w-md text-lg text-text-muted">
+              Real checking and savings accounts, an AI assistant grounded in your own data, and
+              fraud protection a human always signs off on.
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                to="/register"
+                className="rounded-md bg-marigold-500 px-6 py-3 text-base font-semibold text-white hover:bg-marigold-600"
+              >
+                Open an account
+              </Link>
+              <Link to="/learn/accounts" className="flex items-center gap-1 font-semibold text-marigold-700 hover:underline">
+                Learn more
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
 
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center gap-6 px-4 py-24 text-center">
-          <h1 className="font-display text-5xl font-semibold text-text">
-            Banking that grows with you.
-          </h1>
-          <p className="max-w-xl text-lg text-text-muted">
-            Marigold Bank pairs real checking and savings accounts with an AI assistant, spending
-            insights, and human-reviewed fraud protection — all in one place.
-          </p>
-          <div className="flex gap-3">
-            <Link to="/register">
-              <Button className="px-6 py-3 text-base">Open an account</Button>
-            </Link>
-            <Link to="/login">
-              <Button variant="ghost" className="px-6 py-3 text-base">
-                Sign in
-              </Button>
-            </Link>
+          <div className="relative mx-auto h-72 w-full max-w-sm md:h-96">
+            <Sparkles size={20} className="absolute right-2 top-0 text-marigold-300" />
+            <Sparkles size={14} className="absolute left-8 top-10 text-marigold-300" />
+            <Sparkles size={16} className="absolute bottom-24 right-16 text-white/70" />
+
+            <div className="absolute left-0 top-6 w-64 rounded-2xl bg-marigold-500 p-5 text-white shadow-xl">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold tracking-wide">MARIGOLD DEBIT</span>
+                <MarigoldMark size={22} />
+              </div>
+              <div className="mt-9 h-5 w-8 rounded-sm bg-white/40" />
+              <p className="mt-5 font-mono text-base tracking-widest">•••• •••• •••• 4521</p>
+              <div className="mt-4 flex items-center justify-between text-[11px]">
+                <span>A CUSTOMER</span>
+                <span>VALID THRU 12/29</span>
+              </div>
+            </div>
+
+            <div className="absolute bottom-0 right-0 w-64 rounded-2xl bg-gradient-to-br from-leaf-600 to-leaf-800 p-5 text-white shadow-xl">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold tracking-wide">MARIGOLD SAVINGS</span>
+                <MarigoldMark size={22} />
+              </div>
+              <div className="mt-9 h-5 w-8 rounded-sm bg-white/40" />
+              <p className="mt-5 font-mono text-base tracking-widest">•••• •••• •••• 8890</p>
+              <div className="mt-4 flex items-center justify-between text-[11px]">
+                <span>A CUSTOMER</span>
+                <span>VALID THRU 12/29</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="features" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-20">
-        <h2 className="mb-2 text-center font-display text-3xl font-semibold text-text">
-          Everything you need, nothing you don't
-        </h2>
-        <p className="mb-10 text-center text-text-muted">
-          Built to show what responsible, useful AI in banking actually looks like.
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <p className="text-sm font-semibold tracking-wide text-marigold-700">
+          WELCOME TO MARIGOLD BANK
         </p>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((feature) => (
-            <FeatureCard key={feature.title} {...feature} />
-          ))}
+        <h2 className="mt-1 font-display text-3xl font-semibold text-text md:text-4xl">
+          Do more with your money
+        </h2>
+
+        <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-[1fr_2fr]">
+          <div className="rounded-md border border-border p-5">
+            <h3 className="mb-3 text-sm font-semibold text-text">Quick links</h3>
+            <ul className="flex flex-col gap-2.5">
+              {QUICK_LINKS.map((link) => (
+                <li key={link.to}>
+                  <Link to={link.to} className="text-sm text-marigold-700 hover:underline">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div className="relative flex flex-col justify-between overflow-hidden rounded-md p-6 text-white">
+              <div
+                className="absolute inset-0 bg-cover"
+                style={{ backgroundImage: `url(${torontoSkyline})`, backgroundPosition: 'center 75%' }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-marigold-700/90 via-marigold-700/50 to-marigold-700/10" />
+              <MessageCircle size={26} className="relative" />
+              <div className="relative mt-8">
+                <p className="font-display text-xl font-semibold">Ask Marigold AI anything</p>
+                <p className="mt-2 text-sm text-marigold-50">
+                  Grounded in your real accounts and bank policy — never a guess.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col justify-between rounded-md bg-leaf-700 p-6 text-white">
+              <ShieldCheck size={26} />
+              <div className="mt-8">
+                <p className="font-display text-xl font-semibold">Fraud caught, human-reviewed</p>
+                <p className="mt-2 text-sm text-leaf-50">
+                  AI flags it. A trained analyst always makes the final call.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" className="scroll-mt-24 border-t border-border">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <h2 className="mb-2 font-display text-2xl font-semibold text-text">Explore your options</h2>
+          <p className="mb-10 text-text-muted">
+            Built to show what responsible, useful AI in banking actually looks like.
+          </p>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {FEATURES.map((feature) => (
+              <FeatureCard key={feature.title} {...feature} />
+            ))}
+          </div>
         </div>
       </section>
 
